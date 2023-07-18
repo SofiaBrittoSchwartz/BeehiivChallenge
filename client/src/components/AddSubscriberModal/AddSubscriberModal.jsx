@@ -20,6 +20,7 @@ const AddSubscriberModal = (props) => {
       setName(value)
     }
   }
+
   const onSubmit = () => {
     const payload = {
       email,
@@ -37,6 +38,7 @@ const AddSubscriberModal = (props) => {
     })
     .finally(() => {
       setIsSaving(false)
+      window.location.reload(false)
     })
   }
 

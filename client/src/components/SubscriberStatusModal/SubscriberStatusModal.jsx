@@ -14,7 +14,7 @@ const SubscriberStatusModal = (props) => {
 
   const onUpdate = () => {
     const payload = {
-      status: status === 'active' ? 'inactive' : 'active'
+      isSubscribed: !(status === 'active')
     }
 
     setIsDeleting(true)
@@ -28,6 +28,7 @@ const SubscriberStatusModal = (props) => {
     })
     .finally(() => {
       setIsDeleting(false)
+      window.location.reload(false)
     })
   }
 

@@ -6,7 +6,8 @@ class SubscribersController < ApplicationController
   ##
   # GET /api/subscribers
   def index
-    subscribers = Subscriber.all
+    # Added sort to ensure the same order is maintained even after updates are made
+    subscribers = Subscriber.all.sort_by { |subscriber| subscriber.id }
 
     total_records = subscribers.count
     limited_subscribers = subscribers[offset..limit]
@@ -21,6 +22,9 @@ class SubscribersController < ApplicationController
   end
 
   def update
+    @subscriber = Subscriber.find_by(id: params[:id])
+    @subscriber.update(isSubscribed: params[:isSubscribed])
+    @subscriber.save!
     render json: {message: "Subscriber updated successfully"}, formats: :json, status: :ok
   end
 end
