@@ -11,6 +11,11 @@ const AddSubscriberModal = (props) => {
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
 
+  const [formErrors, setFormErrors] = useState({
+    email: '',
+    name: ''
+  })
+
   const handleChange = (e) => {
     const { target: { name, value }} = e
 
@@ -21,7 +26,33 @@ const AddSubscriberModal = (props) => {
     }
   }
 
+  const validateForm = () => {
+    let errors = {
+      email: '',
+      name: ''
+    }
+
+    if(!name) errors.name = "Name is required"
+    if(!email) {
+      errors.email = "Email is required"
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = "Invalid email format"
+    }
+
+    setFormErrors(errors)
+
+    return Object.values(errors).every((error) => error === '')
+  }
+
   const onSubmit = () => {
+    const isValid = validateForm()
+
+    if (isValid) {
+      console.log("Form submitted successfully.")
+    } else {
+      console.log("Form contains errors. Please double check inputs.")
+    }
+
     const payload = {
       email,
       name
@@ -31,6 +62,7 @@ const AddSubscriberModal = (props) => {
     createSubscriber(payload)
     .then(() => {
       onSuccess()
+      window.location.reload(false)
     })
     .catch((payload) => {
       const error = payload?.response?.data?.message || 'Something went wrong'
@@ -38,7 +70,6 @@ const AddSubscriberModal = (props) => {
     })
     .finally(() => {
       setIsSaving(false)
-      window.location.reload(false)
     })
   }
 
@@ -59,6 +90,7 @@ const AddSubscriberModal = (props) => {
                 onChange={handleChange}
                 value={email}
               />
+              {formErrors.email && <span className="error">{formErrors.email}</span>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
@@ -72,6 +104,7 @@ const AddSubscriberModal = (props) => {
                 onChange={handleChange}
                 value={name}
               />
+              {formErrors.name && <span className="error">{formErrors.name}</span>}
             </div>
           </form>
         </ModalBody>
