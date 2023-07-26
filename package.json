@@ -6,7 +6,7 @@
     "node": "16.x"
   },
   "scripts": {
-    "postinstall": "cd client && yarn build",
+    "postinstall": "cd client && yarn install && yarn build",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "build": "npm run --prefix client build",
     "deploy": "git fetch && git push -f heroku origin/master:refs/heads/master",
