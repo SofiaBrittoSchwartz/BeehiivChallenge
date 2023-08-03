@@ -74,7 +74,7 @@ function App() {
     setShowAddModal(false)
   }
 
-  const onUpdateStatusSelectected = (subscriberId, status) => {
+  const onUpdateStatusSelected = (subscriberId, status) => {
     setFocusedSubscriberId(subscriberId)
     setFocusedSubscriberStatus(status)
   }
@@ -115,7 +115,7 @@ function App() {
         <div className="mt-6">
           <SubscriberTable
             subscribers={subscribers}
-            onChangeStatusSelected={onUpdateStatusSelectected}
+            onChangeStatusSelected={onUpdateStatusSelected}
           />
           <TablePagination pagination={pagination} onPageSelected={onPageSelected} />
         </div>

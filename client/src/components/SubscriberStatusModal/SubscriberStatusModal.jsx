@@ -12,19 +12,23 @@ const SubscriberStatusModal = (props) => {
   const { isOpen, onSuccess, onClose, subscriberId, status } = props;
   const [isDeleting, setIsDeleting] = useState(false)
 
+  const [formError, setFormError] = useState('')
+
   const onUpdate = () => {
     const payload = {
-      status: status === 'active' ? 'inactive' : 'active'
+      isSubscribed: !(status === 'active')
     }
 
     setIsDeleting(true)
     updateSubscriber(subscriberId, payload)
     .then(() => {
       onSuccess()
+      window.location.reload(false)
     })
     .catch((payload) => {
       const error = payload?.response?.data?.message || 'Something went wrong'
       console.error(error)
+      setFormError("An error occurred. Please reload the page and try again.")
     })
     .finally(() => {
       setIsDeleting(false)
@@ -44,6 +48,7 @@ const SubscriberStatusModal = (props) => {
       <>
         <ModalBody>
           {messageBodyText}
+          {formError && <span className="error">{formError}</span>}
         </ModalBody>
         <ModalFooter>
           <SecondaryButton

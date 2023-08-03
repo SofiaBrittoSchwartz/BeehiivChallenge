@@ -6,56 +6,25 @@ class SubscribersController < ApplicationController
   ##
   # GET /api/subscribers
   def index
-    subscribers = [
-      {
-        id: 1,
-        name: "Rick Sanchez",
-        email: "rickc137@citadel.com",
-        status: "active"
-      },
-      {
-        id: 2,
-        name: "Morty Smith",
-        email: "morty.smith@gmail.com",
-        status: "inactive"
-      },
-      {
-        id: 3,
-        name: "Jerry Smith",
-        email: "jerry.smith@aol.com",
-        status: "active"
-      },
-      {
-        id: 4,
-        name: "Beth Smith",
-        email: "beth.smith@gmail.com",
-        status: "active"
-      },
-      {
-        id: 5,
-        name: "Summer Smith",
-        email: "summer.smith@gmail.com",
-        status: "active"
-      },
-      {
-        id: 6,
-        name: "Bird Person",
-        email: "bird.person@birdworld.com",
-        status: "active"
-      }
-    ]
+    # Added sort to ensure the same order is maintained even after updates are made
+    subscribers = Subscriber.all.sort_by { |subscriber| subscriber.id }
 
     total_records = subscribers.count
-    limited_subscribers = subscribers[offset..limit]
+    limited_subscribers = subscribers[offset...(offset+limit)]
 
     render json: {subscribers: limited_subscribers, pagination: pagination(total_records)}, formats: :json
   end
 
   def create
+    @subscriber = Subscriber.create(email: params[:email].downcase, name: params[:name], isSubscribed: true)
+    @subscriber.save!
     render json: {message: "Subscriber created successfully"}, formats: :json, status: :created
   end
 
   def update
+    @subscriber = Subscriber.find_by(id: params[:id])
+    @subscriber.update(isSubscribed: params[:isSubscribed])
+    @subscriber.save!
     render json: {message: "Subscriber updated successfully"}, formats: :json, status: :ok
   end
 end
